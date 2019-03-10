@@ -10,3 +10,5 @@ def setup_routes(app):
     app.router.add_get('/', hello)
     app.router.add_get('/forum', forum.index)
     app.router.add_get('/forum/{forum_id}', forum.list_threads)
+
+    app.router.add_get('/thread/{thread_id}', thread.list_comments)
