@@ -1,6 +1,7 @@
 import asyncio
 from aiohttp import web
 from routes import setup_routes
+from middlewares import compress_response
 
 async def on_startup(app):
     pass
@@ -8,8 +9,9 @@ async def on_startup(app):
 async def on_cleanup(app):
     pass
 
+
 async def create_app():
-    app = web.Application()
+    app = web.Application(middlewares=[compress_response.inject_compression])
     app.on_startup.append(on_startup)
     app.on_cleanup.append(on_cleanup)
 
