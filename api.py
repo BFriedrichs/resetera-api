@@ -20,8 +20,8 @@ async def create_app():
 
 if __name__ == "__main__":
     port = 8080
-    if len(sys.args) > 2:
-        port = sys.args[2]
+    if len(sys.argv) > 1:
+        port = sys.argv[1]
 
     web.run_app(create_app(), host='localhost', port=port)
 
