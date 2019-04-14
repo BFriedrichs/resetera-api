@@ -2,6 +2,7 @@ import asyncio
 from aiohttp import web
 from routes import setup_routes
 from middlewares import compress_response
+import sys
 
 async def on_startup(app):
     pass
@@ -18,6 +19,10 @@ async def create_app():
     return app
 
 if __name__ == "__main__":
-    web.run_app(create_app(), host='127.0.0.1', port=8080)
+    port = 8080
+    if len(sys.args) > 2:
+        port = sys.args[2]
+
+    web.run_app(create_app(), host='localhost', port=port)
 
     # docker run -d --name resetera-api -e 'VIRTUAL_PORT=8080' -e 'LETSENCRYPT_EMAIL=bjoern@friedrichs1.de' -e 'LETSENCRYPT_HOST=resetera.bjoern-friedrichs.de' -e 'VIRTUAL_HOST=resetera.bjoern-friedrichs.de' bfriedrichs/resetera
