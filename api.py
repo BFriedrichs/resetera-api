@@ -3,6 +3,7 @@ from aiohttp import web
 from routes import setup_routes
 from middlewares import compress_response
 import sys
+import socket
 
 async def on_startup(app):
     pass
@@ -23,6 +24,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         port = sys.argv[1]
 
-    web.run_app(create_app(), host='localhost', port=port)
+    ip = socket.gethostbyname(socket.gethostname())
+    web.run_app(create_app(), host=ip, port=port)
 
     # docker run -d --name resetera-api -e 'VIRTUAL_PORT=8080' -e 'LETSENCRYPT_EMAIL=bjoern@friedrichs1.de' -e 'LETSENCRYPT_HOST=resetera.bjoern-friedrichs.de' -e 'VIRTUAL_HOST=resetera.bjoern-friedrichs.de' bfriedrichs/resetera
