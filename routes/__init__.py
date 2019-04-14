@@ -1,5 +1,5 @@
 from aiohttp import web
-from routes import forum, thread
+from routes import forum, thread, token
 from utils import api_response
 
 def hello(request):
@@ -14,3 +14,5 @@ def setup_routes(app):
 
     app.router.add_get('/thread/{thread_id}', thread.list_posts)
     app.router.add_get('/thread/{thread_id}/{page}', thread.list_posts)
+
+    app.router.add_post('/push-token', token.register_token)
