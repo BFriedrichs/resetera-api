@@ -5,6 +5,6 @@ WORKDIR /app
 
 RUN ["pip", "install", "-r", "requirements.txt"]
 
-EXPOSE 80/tcp
+EXPOSE 8080/tcp
 
 ENTRYPOINT ["python", "api.py"]

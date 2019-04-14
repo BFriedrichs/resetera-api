@@ -18,6 +18,6 @@ async def create_app():
     return app
 
 if __name__ == "__main__":
-    web.run_app(create_app(), host='127.0.0.1', port=80)
+    web.run_app(create_app(), host='127.0.0.1', port=8080)
 
-    # docker run -d --name resetera-api -e 'LETSENCRYPT_EMAIL=bjoern@friedrichs1.de' -e 'LETSENCRYPT_HOST=resetera.bjoern-friedrichs.de' -e 'VIRTUAL_HOST=resetera.bjoern-friedrichs.de' --entrypoint "/bin/sh" bfriedrichs/resetera -c "while true; do sleep 2; date; done"
+    # docker run -d --name resetera-api -e 'VIRTUAL_PORT=8080' -e 'LETSENCRYPT_EMAIL=bjoern@friedrichs1.de' -e 'LETSENCRYPT_HOST=resetera.bjoern-friedrichs.de' -e 'VIRTUAL_HOST=resetera.bjoern-friedrichs.de' bfriedrichs/resetera
