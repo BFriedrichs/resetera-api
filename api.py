@@ -26,7 +26,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--port', type=int, default=8080, help='The port to run on')
     parser.add_argument('--ip', type=str, default=ip, help='The server ip')
-    args = parser.parse_args()
     parser.add_argument('-m', '--mongo-uri', type=str, default="mongodb://localhost:27017", help='MongoDB uri')
     args = parser.parse_args()
     connection.setup_connection(args.mongo_uri)

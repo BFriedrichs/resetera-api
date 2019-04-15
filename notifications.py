@@ -58,7 +58,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-o', '--once', type=bool,  default=False, help='Exec only once')
     parser.add_argument('-i', '--ignore-cache', type=bool, default=False, help='Ignore previous cache')
-    args = parser.parse_args()
     parser.add_argument('-m', '--mongo-uri', type=str, default="mongodb://localhost:27017", help='MongoDB uri')
     args = parser.parse_args()
 
