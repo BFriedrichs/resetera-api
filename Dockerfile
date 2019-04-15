@@ -7,4 +7,4 @@ RUN ["pip", "install", "-r", "requirements.txt"]
 
 EXPOSE 8080/tcp
 
-ENTRYPOINT ["python", "api.py"]
+ENTRYPOINT ["python", "api.py", "--mongo-uri", "mongodb://mongodb:27017"]

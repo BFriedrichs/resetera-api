@@ -1,7 +1,10 @@
 from pymongo import MongoClient
+DB = None
 
-client = MongoClient('mongodb://{}:27017'.format("localhost"))
-db = client.Resetera
+def setup_connection(mongo_uri):
+    global DB
+    client = MongoClient(mongo_uri)
+    DB = client.Resetera
 
 def get_collection(collection):
-    return db[collection]
+    return DB[collection]

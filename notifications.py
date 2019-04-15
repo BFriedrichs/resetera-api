@@ -2,7 +2,7 @@ import asyncio
 import aiohttp
 from utils import constants, connection, send_push
 from bs4 import BeautifulSoup
-import sys
+import argparse
 
 WAIT_TIMER = 60 * 10
 
@@ -35,8 +35,7 @@ async def parse_trending():
             }
             return thread
 
-async def periodic(wait_time, times=0, ignore_cache=False):
-    i = 0
+async def periodic(wait_time, once=False, ignore_cache=False):
     while True:
         thread = await parse_trending()
         if ignore_cache:
@@ -48,8 +47,7 @@ async def periodic(wait_time, times=0, ignore_cache=False):
             if not hit:
                 thread_cache.insert_one(filt)
                 await send_notification(thread)
-        i += 1
-        if times != 0 and i == times:
+        if once:
             break
         await asyncio.sleep(wait_time)
 
@@ -57,12 +55,18 @@ def stop():
     task.cancel()
 
 if __name__ == "__main__":
-    times = 0
-    if len(sys.argv) > 1:
-        times = int(sys.argv[1])
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-o', '--once', type=bool,  default=False, help='Exec only once')
+    parser.add_argument('-i', '--ignore-cache', type=bool, default=False, help='Ignore previous cache')
+    args = parser.parse_args()
+    parser.add_argument('-m', '--mongo-uri', type=str, default="mongodb://localhost:27017", help='MongoDB uri')
+    args = parser.parse_args()
+
+    connection.setup_connection(args.mongo_uri)
+
     loop = asyncio.get_event_loop()
     loop.call_later(5, stop)
-    task = loop.create_task(periodic(WAIT_TIMER, times))
+    task = loop.create_task(periodic(WAIT_TIMER, once=args.once, ignore_cache=args.ignore_cache))
 
     try:
         loop.run_until_complete(task)
