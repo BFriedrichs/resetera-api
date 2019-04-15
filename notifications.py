@@ -4,8 +4,6 @@ from utils import constants, connection, send_push
 from bs4 import BeautifulSoup
 import argparse
 
-WAIT_TIMER = 60 * 10
-
 async def send_notification(thread):
     coll = connection.get_collection("PushToken")
     tokens = coll.find({})
@@ -51,23 +49,23 @@ async def periodic(wait_time, once=False, ignore_cache=False):
             break
         await asyncio.sleep(wait_time)
 
-def stop():
-    task.cancel()
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-o', '--once', type=bool,  default=False, help='Exec only once')
     parser.add_argument('-i', '--ignore-cache', type=bool, default=False, help='Ignore previous cache')
+    parser.add_argument('-w', '--wait-time', type=int, default=600, help='Time between rechecking')
+
     parser.add_argument('-m', '--mongo-uri', type=str, default="mongodb://localhost:27017", help='MongoDB uri')
     args = parser.parse_args()
 
     connection.setup_connection(args.mongo_uri)
 
     loop = asyncio.get_event_loop()
-    loop.call_later(5, stop)
-    task = loop.create_task(periodic(WAIT_TIMER, once=args.once, ignore_cache=args.ignore_cache))
+    task = loop.create_task(periodic(args.wait_time, once=args.once, ignore_cache=args.ignore_cache))
 
     try:
         loop.run_until_complete(task)
-    except asyncio.CancelledError:
-        pass
+    except asyncio.CancelledError as err:
+        print(err)
+
+    # docker run -d --name resetera-api-push --link=mongodb:mongodb bfriedrichs/resetera-push
