@@ -12,7 +12,9 @@ async def on_startup(app):
 async def on_cleanup(app):
     pass
 
-async def create_app():
+async def create_app(mongo_uri="mongodb://127.0.0.1:27017"):
+    connection.setup_connection(mongo_uri)
+
     app = web.Application(middlewares=[compress_response.inject_compression])
     app.on_startup.append(on_startup)
     app.on_cleanup.append(on_cleanup)
@@ -26,9 +28,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--port', type=int, default=8080, help='The port to run on')
     parser.add_argument('--ip', type=str, default=ip, help='The server ip')
-    parser.add_argument('-m', '--mongo-uri', type=str, default="mongodb://localhost:27017", help='MongoDB uri')
+    parser.add_argument('-m', '--mongo-uri', type=str, default="mongodb://127.0.0.1:27017", help='MongoDB uri')
     args = parser.parse_args()
-    connection.setup_connection(args.mongo_uri)
-    web.run_app(create_app(), host=args.ip, port=args.port)
+
+    web.run_app(create_app(args.mongo_uri), host=args.ip, port=args.port)
 
     # docker run -d --name resetera-api -e 'VIRTUAL_PORT=8080' -e 'LETSENCRYPT_EMAIL=bjoern@friedrichs1.de' -e 'LETSENCRYPT_HOST=resetera.bjoern-friedrichs.de' -e 'VIRTUAL_HOST=resetera.bjoern-friedrichs.de' --link=mongodb:mongodb bfriedrichs/resetera
