@@ -6,7 +6,8 @@ import argparse
 
 async def send_notification(thread, filt={}):
     coll = connection.get_collection("PushToken")
-    tokens = coll.find(filt)
+    tokens = list(coll.find(filt))
+    print("Sending to {} clients".format(len(tokens)))
     for token in tokens:
         send_push.send_push_message(token['token'], thread['title'], thread['body'], thread)
 
@@ -43,7 +44,10 @@ async def parse_threads(url):
 
 async def periodic(wait_time, once=False, ignore_cache=False):
     while True:
+        print("Begin parse")
         thread = await parse_threads('trending/threads.1/')
+        print("Found trending: {}".format(thread['id']))
+
         thread['title'] = "New Trending Thread"
         trending_thread_filter = {'trending_active': True}
         if ignore_cache:
@@ -57,6 +61,8 @@ async def periodic(wait_time, once=False, ignore_cache=False):
                 await send_notification(thread, trending_thread_filter)
 
         thread = await parse_threads('forums/-/latest-threads/')
+        print("Found new: {}".format(thread['id']))
+
         thread['title'] = "New Thread"
         new_thread_filter = {
             'new_active': True,
@@ -79,7 +85,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-o', '--once', action='store_true',  default=False, help='Exec only once')
     parser.add_argument('-i', '--ignore-cache', action='store_true', default=False, help='Ignore previous cache')
-    parser.add_argument('-w', '--wait-time', type=int, default=60, help='Time between rechecking')
+    parser.add_argument('-w', '--wait-time', type=int, default=300, help='Time between rechecking')
 
     parser.add_argument('-m', '--mongo-uri', type=str, default="mongodb://localhost:27017", help='MongoDB uri')
     args = parser.parse_args()
