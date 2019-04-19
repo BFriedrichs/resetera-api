@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import aiohttp
 from utils import api_response, constants, parse_content, parse_poll
+import re
 
 async def list_posts(request):
     thread_id = request.match_info['thread_id']
@@ -62,6 +63,14 @@ async def list_posts(request):
                 "url": thread_url,
                 "pages": pages
             }
+
+            header = soup.find(class_="cover")
+            if header is not None:
+                style = header.get('style')
+                if style is not None:
+                    img_url = re.sub(r".*url\('(.*)'\).*", "\g<1>", style)
+                    meta['img_url'] = img_url
+
             result['id'] = int(thread_id)
             result['page'] = page
             result['meta'] = meta
