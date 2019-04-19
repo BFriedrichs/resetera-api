@@ -15,5 +15,5 @@ def setup_routes(app):
     app.router.add_get('/thread/{thread_id}', thread.list_posts)
     app.router.add_get('/thread/{thread_id}/{page}', thread.list_posts)
 
-    app.router.add_post('/push-token', token.register_token)
-    app.router.add_post('/push-token/active', token.set_active)
+    app.router.add_post('/push/register', token.register_token)
+    app.router.add_post('/push/config', token.config)

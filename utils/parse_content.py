@@ -79,13 +79,14 @@ def parse_content(content):
     lists = content.find_all('ul')
     for l in lists:
         l.name = "TextList"
-        clean_attrs(l)
+        l['type'] = "simple"
+        clean_attrs(l, ['type'])
 
     ordered_lists = content.find_all('ol')
     for l in ordered_lists:
         l.name = "TextList"
-        clean_attrs(l)
         l['type'] = "ordered"
+        clean_attrs(l, ['type'])
 
     list_items = content.find_all('li')
     for li in list_items:
