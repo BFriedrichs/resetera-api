@@ -33,4 +33,4 @@ if __name__ == "__main__":
 
     web.run_app(create_app(args.mongo_uri), host=args.ip, port=args.port)
 
-    # docker run -d --name resetera-api -e 'VIRTUAL_PORT=8080' -e 'LETSENCRYPT_EMAIL=bjoern@friedrichs1.de' -e 'LETSENCRYPT_HOST=resetera.bjoern-friedrichs.de' -e 'VIRTUAL_HOST=resetera.bjoern-friedrichs.de' --link=mongodb:mongodb bfriedrichs/resetera
+    # docker run -d --name resetera-api -e 'VIRTUAL_PORT=8080' -e 'LETSENCRYPT_EMAIL=bjoern@friedrichs1.de' -e 'LETSENCRYPT_HOST=resetera.bfriedrichs.de' -e 'VIRTUAL_HOST=resetera.bfriedrichs.de' --link=mongodb:mongodb bfriedrichs/resetera
